@@ -3,8 +3,7 @@ import pandas as pd
 import pickle
 import time
 from PIL import Image
-import sklearn
-import joblib
+
 
 st.set_page_config(page_title="Stress Level Prediction", layout="wide")
 
@@ -115,8 +114,10 @@ def predict_stress_level(input_df):
 def run():
     st.write("""
     # Stress Level Prediction Dashboard
-    This dashboard created by : [@fitrirachmawati](https://www.linkedin.com/in/fitrirachmawati1004/)
+    
     """)
+
+    st.toast('This dashboard created by : [@fitrirachmawati](https://www.linkedin.com/in/fitrirachmawati1004/)', icon='😍')
 
     st.image("stress.png", width=800)
 
@@ -202,13 +203,22 @@ def run():
         # Menghitung hasil kualitatif tingkat stres
         qualitative_result = categorize_stress_level(predicted_stress_level)
 
-        # Menampilkan hasil prediksi Stress Level secara kualitatif
-        st.subheader('Predicted Stress Level:')
-        st.write(f"**{qualitative_result}**")
+        with st.spinner('Wait for it...'):
+            time.sleep(4)
+            # Menampilkan hasil prediksi Stress Level secara kualitatif
+            st.subheader('Predicted Stress Level:')
+            if qualitative_result == "Very Low" or qualitative_result == "Low":
+                st.snow()
+                st.success(f"**{qualitative_result}**", icon="✅")
+            elif qualitative_result == "Moderate":
+                st.success(f"**{qualitative_result}**",  icon="⚠️")
+            elif qualitative_result == "High" or qualitative_result == "Very High":
+                st.error(f"**{qualitative_result}**", icon="🚨")
+                
 
-         # Menampilkan saran berdasarkan tingkat stres
-        st.subheader("Advice:")
-        st.write(get_stress_advice(qualitative_result))
+            # Menampilkan saran berdasarkan tingkat stres
+            st.subheader("Advice:")
+            st.write(get_stress_advice(qualitative_result))
 
 
 if __name__ == "__main__" :
